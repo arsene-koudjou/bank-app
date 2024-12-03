@@ -5,7 +5,20 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor @AllArgsConstructor
+@NoArgsConstructor
 public class BankAccountDTO {
-    private String type;
+    protected String type;
+    protected String accountNumber;
+
+    public BankAccountDTO(String type) {
+        this.type = type;
+    }
+
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
+    }
+
+    public String getAccountNumber() {
+        return accountNumber;
+    }
 }

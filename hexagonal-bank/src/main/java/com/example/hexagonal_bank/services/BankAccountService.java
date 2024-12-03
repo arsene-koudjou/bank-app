@@ -1,9 +1,6 @@
 package com.example.hexagonal_bank.services;
 
-import com.example.hexagonal_bank.dtos.BankAccountDTO;
-import com.example.hexagonal_bank.dtos.CurrentBankAccountDTO;
-import com.example.hexagonal_bank.dtos.CustomerDTO;
-import com.example.hexagonal_bank.dtos.SavingAccountDTO;
+import com.example.hexagonal_bank.dtos.*;
 import com.example.hexagonal_bank.exceptions.BalanceNotSufficientException;
 import com.example.hexagonal_bank.exceptions.BankAccountNotFoundException;
 import com.example.hexagonal_bank.exceptions.CustomerNotFoundException;
@@ -22,11 +19,13 @@ public interface BankAccountService {
     void credit(String accountId, double amount, String description) throws BankAccountNotFoundException;
     void transfer(String accountIdSource, String accountIdDestination, double amount) throws BankAccountNotFoundException, BalanceNotSufficientException;
 
-    List<BankAccountDTO> bankAccountList();
+    List<BankAccountDTO> bankAccountList(Long id);
 
     CustomerDTO getCustomer(Long customerId) throws CustomerNotFoundException;
 
     CustomerDTO updateCustomer(CustomerDTO customerDTO);
 
     void deleteCustomer(Long customerId);
+
+    void createNewBankAccount(CreateBankAccountDTO createBankAccountDTO) throws CustomerNotFoundException;
 }
