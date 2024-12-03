@@ -11,8 +11,8 @@ import java.util.List;
 @Service
 public interface BankAccountService {
     CustomerDTO saveCustomer(CustomerDTO customerDTO);
-    CurrentBankAccountDTO saveCurrentBankAccount(double initialBalance, double overDraft, Long customerId) throws CustomerNotFoundException;
-    SavingAccountDTO saveSavingBankAccount(double initialBalance, double interestRate, Long customerId) throws CustomerNotFoundException;
+    CurrentBankAccountDTO saveCurrentBankAccount(double initialBalance, double overDraft, Long customerId,boolean isNeedTwo) throws CustomerNotFoundException;
+    SavingAccountDTO saveSavingBankAccount(double initialBalance, double interestRate, Long customerId,boolean isNeedTwo) throws CustomerNotFoundException;
     List<CustomerDTO> listCustomers();
     BankAccountDTO getBankAccount(String accountId) throws BankAccountNotFoundException;
     void debit(String accountId, double amount, String description) throws BankAccountNotFoundException, BalanceNotSufficientException;

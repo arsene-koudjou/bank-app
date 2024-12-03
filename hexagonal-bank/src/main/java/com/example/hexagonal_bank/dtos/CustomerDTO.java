@@ -1,6 +1,7 @@
 package com.example.hexagonal_bank.dtos;
 
 import com.example.hexagonal_bank.model.BankAccount;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,6 +16,6 @@ public class CustomerDTO {
     private Long id;
     private String name;
     private String email;
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JsonIgnore
     private List<BankAccount> bankAccounts;
 }

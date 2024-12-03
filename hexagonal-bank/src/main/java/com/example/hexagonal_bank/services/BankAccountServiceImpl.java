@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 @Service
 @Data
 public class BankAccountServiceImpl implements BankAccountService{
+    private String accountNumber=null;
 
     private static final Logger log = LoggerFactory.getLogger(BankAccountServiceImpl.class);
     private CustomerRepository customerRepository;
@@ -38,6 +39,7 @@ public class BankAccountServiceImpl implements BankAccountService{
         this.bankAccountRepository = bankAccountRepository;
         this.dtoMapper = dtoMapper;
         this.accountOperationRepository = accountOperationRepository;
+        this.accountNumber = buildNewAccount();
     }
 
     @Override
@@ -48,17 +50,20 @@ public class BankAccountServiceImpl implements BankAccountService{
         return dtoMapper.fromCustomer(savedCustomer);
     }
 
+    public String buildNewAccount(){
+        return "FR76"+(int)(Math.random()*100000);
+    }
+
     @Override
-    public CurrentBankAccountDTO saveCurrentBankAccount(double initialBalance, double overDraft, Long customerId) throws CustomerNotFoundException {
+    public CurrentBankAccountDTO saveCurrentBankAccount(double initialBalance, double overDraft, Long customerId,boolean isTwoAccounts) throws CustomerNotFoundException {
         Customer customer=customerRepository.findById(customerId).orElse(null);
-        String numberAccount = "FR76"+(int)(Math.random()*100000);
         if(customer==null)
             throw new CustomerNotFoundException("Customer not found");
         CurrentAccount currentAccount=new CurrentAccount();
         currentAccount.setId(UUID.randomUUID().toString());
         currentAccount.setCreationDate(new Date());
         currentAccount.setBalance(initialBalance);
-        currentAccount.setAccountNumber(numberAccount);
+        currentAccount.setAccountNumber(isTwoAccounts?this.accountNumber:buildNewAccount());
         currentAccount.setOverDraft(overDraft);
         currentAccount.setCustomer(customer);
         CurrentAccount savedBankAccount = bankAccountRepository.save(currentAccount);
@@ -66,7 +71,7 @@ public class BankAccountServiceImpl implements BankAccountService{
     }
 
     @Override
-    public SavingAccountDTO saveSavingBankAccount(double initialBalance, double depositLimit, Long customerId) throws CustomerNotFoundException {
+    public SavingAccountDTO saveSavingBankAccount(double initialBalance, double depositLimit, Long customerId,boolean isTwoAccounts) throws CustomerNotFoundException {
         Customer customer=customerRepository.findById(customerId).orElse(null);
         String numberAccount = "FR76"+(int)(Math.random()*100000);
         if(customer==null)
@@ -75,7 +80,7 @@ public class BankAccountServiceImpl implements BankAccountService{
         savingAccount.setId(UUID.randomUUID().toString());
         savingAccount.setCreationDate(new Date());
         savingAccount.setBalance(initialBalance);
-        savingAccount.setAccountNumber(numberAccount);
+        savingAccount.setAccountNumber(isTwoAccounts?this.accountNumber:buildNewAccount());
         savingAccount.setDepositLimit(depositLimit);
         savingAccount.setCustomer(customer);
         SavingAccount savedBankAccount = bankAccountRepository.save(savingAccount);
@@ -169,14 +174,14 @@ public class BankAccountServiceImpl implements BankAccountService{
     @Override
     public void createNewBankAccount(CreateBankAccountDTO createBankAccountDTO) throws CustomerNotFoundException {
         if (createBankAccountDTO.isNeedTwoAccounts()){
-            saveCurrentBankAccount(createBankAccountDTO.getInitialBalance(),createBankAccountDTO.getOverDraft(),createBankAccountDTO.getCustomerId());
-            saveSavingBankAccount(createBankAccountDTO.getInitialBalance(),createBankAccountDTO.getDepositLimit(),createBankAccountDTO.getCustomerId());
+            saveCurrentBankAccount(createBankAccountDTO.getInitialBalance(),createBankAccountDTO.getOverDraft(),createBankAccountDTO.getCustomerId(),createBankAccountDTO.isNeedTwoAccounts());
+            saveSavingBankAccount(createBankAccountDTO.getInitialBalance(),createBankAccountDTO.getDepositLimit(),createBankAccountDTO.getCustomerId(),createBankAccountDTO.isNeedTwoAccounts());
         } else {
             // to refer CurrentAccount if type start with character c
             if (createBankAccountDTO.getType().startsWith("C")){
-                saveCurrentBankAccount(createBankAccountDTO.getInitialBalance(),createBankAccountDTO.getOverDraft(),createBankAccountDTO.getCustomerId());
+                saveCurrentBankAccount(createBankAccountDTO.getInitialBalance(),createBankAccountDTO.getOverDraft(),createBankAccountDTO.getCustomerId(),createBankAccountDTO.isNeedTwoAccounts());
             } else {
-                saveSavingBankAccount(createBankAccountDTO.getInitialBalance(),createBankAccountDTO.getDepositLimit(),createBankAccountDTO.getCustomerId());
+                saveSavingBankAccount(createBankAccountDTO.getInitialBalance(),createBankAccountDTO.getDepositLimit(),createBankAccountDTO.getCustomerId(),createBankAccountDTO.isNeedTwoAccounts());
             }
         }
     }
