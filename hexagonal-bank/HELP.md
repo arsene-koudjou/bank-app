@@ -5,7 +5,7 @@ The following was discovered as part of building this project:
 
 # Getting Started
 swagger url: http://localhost:8080/swagger-ui/index.html
-
+les opérations de création de compte bancaire , de débit et credit sont effectué en utilisant l'id du customer 
 ### Reference Documentation
 For further reference, please consider the following sections:
 
