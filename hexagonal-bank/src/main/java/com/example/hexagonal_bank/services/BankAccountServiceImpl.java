@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -154,6 +155,15 @@ public class BankAccountServiceImpl implements BankAccountService{
                       return   dtoMapper.fromCurrentBankAccount((CurrentAccount) bankAccount);
                     } else { return dtoMapper.fromSavingAccount((SavingAccount) bankAccount);}
                 }).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<AccountOperation> accountOperationslist(Long id) {
+        List<AccountOperation> accountOperations = new ArrayList<>();
+        this.bankAccountList(id).stream().forEach(bankAccountDTO -> {
+          accountOperations.addAll(accountOperationRepository.findByBankAccountId(bankAccountDTO.getId()).get());
+        });
+        return accountOperations;
     }
 
     @Override

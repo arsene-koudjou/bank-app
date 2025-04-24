@@ -4,6 +4,7 @@ import com.example.hexagonal_bank.dtos.*;
 import com.example.hexagonal_bank.exceptions.BalanceNotSufficientException;
 import com.example.hexagonal_bank.exceptions.BankAccountNotFoundException;
 import com.example.hexagonal_bank.exceptions.CustomerNotFoundException;
+import com.example.hexagonal_bank.model.AccountOperation;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,7 +21,7 @@ public interface BankAccountService {
     void transfer(String accountIdSource, String accountIdDestination, double amount) throws BankAccountNotFoundException, BalanceNotSufficientException;
 
     List<BankAccountDTO> bankAccountList(Long id);
-
+    List<AccountOperation> accountOperationslist(Long id);
     CustomerDTO getCustomer(Long customerId) throws CustomerNotFoundException;
 
     CustomerDTO updateCustomer(CustomerDTO customerDTO);

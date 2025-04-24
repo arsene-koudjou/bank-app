@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class BankAccountDTO {
+
+    protected String id;
     protected String type;
     protected String accountNumber;
 

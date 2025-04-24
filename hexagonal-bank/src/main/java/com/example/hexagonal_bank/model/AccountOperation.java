@@ -1,6 +1,7 @@
 package com.example.hexagonal_bank.model;
 
 import com.example.hexagonal_bank.enums.OperationType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,6 +21,7 @@ public class AccountOperation {
     private double amount;
     @Enumerated(EnumType.STRING)
     private OperationType type;
+    @JsonIgnore
     @ManyToOne
     private BankAccount bankAccount;
     private String description;

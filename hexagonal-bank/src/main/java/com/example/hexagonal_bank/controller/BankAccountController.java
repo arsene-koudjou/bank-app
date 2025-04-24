@@ -7,6 +7,7 @@ import com.example.hexagonal_bank.dtos.DebitDTO;
 import com.example.hexagonal_bank.exceptions.BalanceNotSufficientException;
 import com.example.hexagonal_bank.exceptions.BankAccountNotFoundException;
 import com.example.hexagonal_bank.exceptions.CustomerNotFoundException;
+import com.example.hexagonal_bank.model.AccountOperation;
 import com.example.hexagonal_bank.model.BankAccount;
 import com.example.hexagonal_bank.services.BankAccountService;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +30,12 @@ public class BankAccountController {
     @GetMapping("/list-account/{id}")
     public List<BankAccountDTO> getBankList(@PathVariable Long id){
         return bankAccountService.bankAccountList(id);
+    }
+
+    @GetMapping("/list-operations/{id}")
+    public List<AccountOperation> getAccountoperationsList(@PathVariable Long id)
+    {
+        return bankAccountService.accountOperationslist(id);
     }
 
     @PostMapping("/debit-account")
