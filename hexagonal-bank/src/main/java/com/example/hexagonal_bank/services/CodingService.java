@@ -1,13 +1,79 @@
 package com.example.hexagonal_bank.services;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class CodingService {
+// filter words exercise
+public List<String> filterWordsWithStream(List<String> words, String letters) {
+    // 1. Create a Set for efficient lookup of filter characters.
+    // Convert the 'letters' string to a stream of characters, then collect them into a HashSet.
+    Set<Character> getFilterChars = letters.chars()        // Get an IntStream of character codes
+            .mapToObj(c -> (char) c) // Convert int code to Character object
+            .collect(Collectors.toCollection(HashSet::new)); // Collect into a HashSet
+
+    // 2. Use a stream to filter the words.
+    // Iterate through the 'words' list and filter based on the presence of any filter character.
+    return words.stream()
+            .filter(word -> ifContainsAnyFilterChar(word, getFilterChars)) // Filter condition
+            .collect(Collectors.toList()); // Collect the filtered words into a new List
+}
+
+    /**
+     * Helper method to check if a word contains any character from the filter set.
+     *
+     * @param word        The word to check.
+     * @param listFilterChars The set of characters to look for.
+     * @return true if the word contains at least one character from listFilterChars, false otherwise.
+     */
+    private boolean ifContainsAnyFilterChar(String word, Set<Character> listFilterChars) {
+        // Convert the word to an IntStream of characters, then check if any match the filter.
+        return word.chars()                // Get an IntStream of character codes
+                .mapToObj(c -> (char) c) // Convert int code to Character object
+                .anyMatch(listFilterChars::contains); // Check if any character is in the listFilterChars set
+    }
+
 
     //find Sum Pair excercise
+    public static List<Integer> findSumPairBruteForce(List<Integer> numbers, int k) {
+        // Initialize with default [0, 0] or a sentinel value indicating no solution found yet.
+        // We use [Integer.MAX_VALUE, Integer.MAX_VALUE] to easily compare for "lowest" indices.
+        int leftIndexFirst = Integer.MAX_VALUE;
+        int rightIndexSecond = Integer.MAX_VALUE;
 
+        // Iterate through all possible pairs (i, j) where i < j
+        for (int i = 0; i < numbers.size(); i++) {
+            for (int j = i + 1; j < numbers.size(); j++) {
+                if (numbers.get(i) + numbers.get(j) == k) {
+                    // Found a valid pair [i, j]
+                    // Compare with the current best pair found so far
+                    if (i < leftIndexFirst) {
+                        // Current 'i' is smaller than the best 'left index' found so far.
+                        // This pair is strictly better.
+                        leftIndexFirst = i;
+                        rightIndexSecond = j;
+                    } else if (i == leftIndexFirst) {
+                        // Current 'i' is the same as the best 'left index'.
+                        // Now compare 'right index' (j).
+                        if (j < rightIndexSecond) {
+                            // Current 'j' is smaller than the best 'right index' for this 'left index'.
+                            rightIndexSecond = j;
+                        }
+                    }
+                }
+            }
+        }
+
+        // After checking all pairs, if leftIndexFirst is still MAX_VALUE, no pair was found.
+        if (leftIndexFirst == Integer.MAX_VALUE) {
+            return Arrays.asList(0, 0);
+        } else {
+            return Arrays.asList(leftIndexFirst, rightIndexSecond);
+        }
+    }
 
     // java exercice to decode the message
     public static String decode(List<String> words, String message) {
