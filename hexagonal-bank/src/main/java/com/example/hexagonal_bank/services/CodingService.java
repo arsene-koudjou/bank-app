@@ -6,6 +6,8 @@ import java.util.stream.Collectors;
 
 public class CodingService {
 
+    //find Sum Pair excercise
+
 
     // java exercice to decode the message
     public static String decode(List<String> words, String message) {
