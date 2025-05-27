@@ -7,6 +7,11 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class CodingService {
+    //strings concatenation
+    public static String concat(String[] strings) {
+        return Arrays.stream(strings).collect(Collectors.joining());
+    }
+
 // filter words exercise
 public List<String> filterWordsWithStream(List<String> words, String letters) {
     // 1. Create a Set for efficient lookup of filter characters.
